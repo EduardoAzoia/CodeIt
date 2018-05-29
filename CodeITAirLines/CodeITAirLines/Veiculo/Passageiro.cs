@@ -9,5 +9,6 @@ namespace CodeITAirLines.Veiculo
     public class Passageiro
     {
         public string Localizacao { get; set; }
+        public string Nome { get; set; }
     }
 }

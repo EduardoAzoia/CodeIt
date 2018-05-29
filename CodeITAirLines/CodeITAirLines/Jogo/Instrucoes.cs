@@ -44,7 +44,7 @@ Seu objetivo aqui é transportar uma tripulação de 8 pessoas que estão no aer
 
         private const string REGRAS = @"
 
-Existem quatro regras para o transporte dos mesmos:
+Existem cinco regras para o transporte dos mesmos:
 
 - 1ª O Capitão não pode ficar a sós com as Comissárias de Bordo;
 - 2ª O Chefe de Voo não pode ficar a sós com os Oficiais;
@@ -78,7 +78,7 @@ Como jogar:
 
         public void MostrarRegras()
         {
-            MessageBox.Show(string.Format("{0}{1}", PREFACIO, PREFACIO));
+            MessageBox.Show(string.Format("{0}{1}", PREFACIO, REGRAS));
         }
          
         public bool IniciarJogo()

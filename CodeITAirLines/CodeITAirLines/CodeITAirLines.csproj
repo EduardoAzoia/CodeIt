@@ -57,7 +57,7 @@
     <Compile Include="Jogo\Validacoes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tripulantes\DicionarioPassageiros.cs" />
+    <Compile Include="Tripulantes\BuilderTripulantes.cs" />
     <Compile Include="Tripulantes\ISubordinado.cs" />
     <Compile Include="Tripulantes\TripulantesVoo.cs" />
     <Compile Include="Veiculo\IMotorista.cs" />

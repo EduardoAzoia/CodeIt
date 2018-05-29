@@ -8,8 +8,6 @@ namespace CodeITAirLines.Veiculo
 {
     public abstract class Motorista : Passageiro, IMotorista
     {
-        bool IMotorista.Pilotar => true;
-
         public abstract List<Type> ObterSubordinados();
     }
 }

@@ -5,8 +5,6 @@ namespace CodeITAirLines.Veiculo
 {
     public interface IMotorista
     {
-        bool Pilotar { get; }
-
         List<Type> ObterSubordinados();
     }
 }

@@ -18,21 +18,21 @@ namespace CodeITAirLines.Jogo
 
         #endregion FORMATACAO
 
-        private readonly DicionarioPassageiros dicionarioPassageiros;
+        private readonly BuilderTripulantes dicionarioPassageiros;
 
-        public BuilderTexto(DicionarioPassageiros dicionarioPassageiros)
+        public BuilderTexto(BuilderTripulantes dicionarioPassageiros)
         {
             this.dicionarioPassageiros = dicionarioPassageiros;
         }
 
-        public string LocalizarPassageiros(Dictionary<int, Passageiro> passageiros)
+        public string LocalizarPassageiros(List<Passageiro> passageiros)
         {
             var situacaoAtual = string.Format(FORMATACAO_CABECALHO, Localizacoes.AEROPORTO, Localizacoes.AVIAO);
 
             passageiros.ToList().ForEach(x =>
             {
-                var EhAeroporto = x.Value.Localizacao == Localizacoes.AEROPORTO;
-                situacaoAtual += MontarFrase(EhAeroporto, dicionarioPassageiros.ObterNomes()[x.Key]);
+                var EhAeroporto = x.Localizacao == Localizacoes.AEROPORTO;
+                situacaoAtual += MontarFrase(EhAeroporto, x.Nome);
             });
 
             return situacaoAtual;

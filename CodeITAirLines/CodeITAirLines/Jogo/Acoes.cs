@@ -12,6 +12,10 @@ namespace CodeITAirLines.Jogo
 {
     public class Acoes
     {
+        private readonly List<string> caracterPermitido;
+
+        private const string FALHA = "F";
+
         #region PREFACIO_JOGO
 
         private const string PREFACIO_JOGO = @"
@@ -24,20 +28,22 @@ Opcões:
         #endregion PREFACIO_JOGO
 
         public Instrucoes instrucoes;
-        private readonly DicionarioPassageiros dicionarioPassageiros;
+        private readonly BuilderTripulantes builderTripulantes;
         private readonly SmartForTwo smartForTwo;
         private readonly BuilderTexto builderTexto;
 
 
         public Acoes(Instrucoes instrucoes,
-          DicionarioPassageiros dicionarioPassageiros,
+             BuilderTripulantes builderTripulantes,
                     SmartForTwo smartForTwo,
                    BuilderTexto builderTexto)
         {
             this.instrucoes = instrucoes;
-            this.dicionarioPassageiros = dicionarioPassageiros;
+            this.builderTripulantes = builderTripulantes;
             this.smartForTwo = smartForTwo;
             this.builderTexto = builderTexto;
+
+            caracterPermitido = new List<string> { "R", "X" };
         }
 
         public void Jogar()
@@ -60,17 +66,23 @@ Opcões:
             }
         }
 
-        private void TomarAcao(string acao, List<char> passageiros = null)
+        private bool TomarAcao(string acao, List<char> passageiros = null)
         {
             switch (acao)
             {
                 case "P":
                     break;
                 case "R":
+                    instrucoes.MostrarRegras();
                     break;
                 case "X":
+                    return true;
+                case FALHA:
+                    MessageBox.Show("Por favor, digita essa merda direito");
                     break;
             }
+
+            return false;
         }
         
         private void ValidarLeituraDados()
@@ -80,14 +92,21 @@ Opcões:
             if (resposta.Exists(x => x == ';'))
                 return;
             else if (resposta.Count == 1)
-                return;
+            {
+                var frase = resposta.First().ToString().ToUpper();
+                var ehCaracterPermitido = caracterPermitido.Exists(x => x.Equals(frase));
+
+                frase = ehCaracterPermitido ? frase : FALHA;
+
+                TomarAcao(frase);
+            }
             else
                 MessageBox.Show("Por favor, digita essa merda direito");
         }
 
         public void PrefacioJogo()
         {
-            var passageiros = dicionarioPassageiros.ObterPassageiros();
+            var passageiros = builderTripulantes.ObterPassageiros();
 
             var localizacaoAtual = builderTexto.LocalizarPassageiros(passageiros);
             localizacaoAtual += builderTexto.LocalizarSmartForTwo(smartForTwo);
