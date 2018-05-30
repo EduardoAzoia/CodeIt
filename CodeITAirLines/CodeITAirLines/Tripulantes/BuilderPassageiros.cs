@@ -1,4 +1,5 @@
-﻿using CodeITAirLines.Tripulantes.TribulacaoCabine;
+﻿using CodeITAirLines.Tripulantes.Interfaces;
+using CodeITAirLines.Tripulantes.TribulacaoCabine;
 using CodeITAirLines.Tripulantes.TripulacaoTecninca;
 using CodeITAirLines.Veiculo;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 
 namespace CodeITAirLines.Tripulantes
 {
-    public class BuilderPassageiros
+    public class BuilderPassageiros : IBuilderPassageiros
     {
         public List<Passageiro> ListaPassageiros { get; set; }
 

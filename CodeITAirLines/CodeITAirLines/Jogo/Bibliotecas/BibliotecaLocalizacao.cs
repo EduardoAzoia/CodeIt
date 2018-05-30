@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CodeITAirLines.Aeroporto
+namespace CodeITAirLines.Jogo
 {
-    public class Localizacoes
+    public static class BibliotecaLocalizacao
     {
         public const string AEROPORTO = "Aeroporto";
         public const string AVIAO = "Avião";

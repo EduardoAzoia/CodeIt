@@ -1,48 +1,29 @@
-﻿using CodeITAirLines.Aeroporto;
-using CodeITAirLines.Tripulantes;
+﻿using CodeITAirLines.Jogo.Interfaces;
+using CodeITAirLines.Tripulantes.Interfaces;
 using CodeITAirLines.Veiculo;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CodeITAirLines.Jogo
 {
-    public class Acoes
+    public class Acoes : IAcoes
     {
-        private readonly List<string> caractersPermitidosMenu;
+        private readonly IInstrucoes instrucoes;
+        private readonly IBuilderPassageiros builderPassageiros;
+        private readonly ISmartForTwo smartForTwo;
+        private readonly IBuilderTexto builderTexto;
+        private readonly IValidacoesDados validacoesDados;
 
-        private const string FALHA = "FALHA";
-
-        #region OPCOES
-
-        private const string OPCOES = @"
-
-Opcões:
-- Digite quem vai para o SmartForTwo, ex: 0;1;
-- Digite 'R' para ler as regras novamente
-- Digite 'X' para sair do jogo";
-
-        #endregion OPCOES
-
-        private readonly Instrucoes instrucoes;
-        private readonly BuilderPassageiros builderPassageiros;
-        private readonly SmartForTwo smartForTwo;
-        private readonly BuilderTexto builderTexto;
-        private readonly Validacoes validacoes;
-
-        public Acoes(Instrucoes instrucoes,
-             BuilderPassageiros builderPassageiros,
-                    SmartForTwo smartForTwo,
-                   BuilderTexto builderTexto,
-                     Validacoes validacoes)
+        public Acoes(IInstrucoes instrucoes,
+             IBuilderPassageiros builderPassageiros,
+                    ISmartForTwo smartForTwo,
+                   IBuilderTexto builderTexto,
+                IValidacoesDados validacoesDados)
         {
             this.instrucoes = instrucoes;
             this.builderPassageiros = builderPassageiros;
             this.smartForTwo = smartForTwo;
             this.builderTexto = builderTexto;
-            this.validacoes = validacoes;
-
-            caractersPermitidosMenu = new List<string> { "R", "X" };
+            this.validacoesDados = validacoesDados;
         }
 
         public void Jogar()
@@ -52,7 +33,10 @@ Opcões:
             var iniciarJogo = instrucoes.IniciarJogo();
 
             if (!iniciarJogo)
+            {
+                instrucoes.FimDeJogo();
                 return;
+            }
 
             bool fimDeJogo = false;
             var passageirosSmartForTwo = new List<string>();
@@ -60,80 +44,43 @@ Opcões:
 
             while (!fimDeJogo)
             {
-                PrefacioJogo(builderPassageiros.ListaPassageiros);
-                var acao = ValidarLeituraDados(out passageirosSmartForTwo);
+                instrucoes.PrefacioJogo(builderPassageiros.ListaPassageiros, smartForTwo);
+                var acao = validacoesDados.ValdarDadosRecebidos(out passageirosSmartForTwo);
 
-                fimDeJogo = TomarAcao(acao, passageirosSmartForTwo);
+                fimDeJogo = ExecutarOpcoes(acao, passageirosSmartForTwo);
             }
 
-            PrefacioJogo(builderPassageiros.ListaPassageiros);
-            Console.Read();
             instrucoes.FimDeJogo();
         }
 
-        protected bool TomarAcao(string acao, List<string> passageiros)
+        protected bool ExecutarOpcoes(string acao, List<string> passageiros)
         {
             switch (acao)
             {
-                case "P":
+                case Biblioteca.INICIAR_TRANSPORTE:
                     smartForTwo.TrafegarPassageiros(passageiros);
                     return EhFimJogo(builderPassageiros.ListaPassageiros);
 
-                case "R":
+                case Biblioteca.MOSTRAR_REGRAS:
                     instrucoes.MostrarRegras();
                     break;
 
-                case "X":
+                case Biblioteca.SAIR:
                     return true;
 
-                case "FALHA":
-                    builderTexto.LancarMensagemDeAtencao(string.Format("Digite uma das opções citadas abaixo:{0}", OPCOES), "Operação inválida");
+                case Biblioteca.FALHA:
+                    builderTexto.LancarMensagemDeAtencao(string.Format("{0},{1}", Biblioteca.UMA_DAS_OPCOES, Biblioteca.OPCOES), Biblioteca.OPERACAO_INVALIDA);
                     break;
             }
 
             return false;
         }
 
-        protected string ValidarLeituraDados(out List<string> passageiros)
-        {
-            passageiros = new List<string>();
-
-            var resposta = Console.ReadLine().ToCharArray();
-
-            if (resposta.ToList().Exists(x => x == ';'))
-                return validacoes.ValidarDados(resposta, out passageiros);
-            else if (resposta.Length == 1)
-            {
-                var frase = resposta.First().ToString().ToUpper();
-
-                var ehCaracterPermitido = caractersPermitidosMenu.Exists(x => x.Equals(frase));
-
-                if (validacoes.ListaIdTripulantes.Exists(x => x.Equals(frase)))
-                {
-                    passageiros.Add(frase);
-                    frase = "P";
-                    ehCaracterPermitido = true;
-                }
-
-                return ehCaracterPermitido ? frase : FALHA;
-            }
-
-            return FALHA;
-        }
-
-        protected void PrefacioJogo(List<Passageiro> tripulantes)
-        {
-            var localizacaoAtual = builderTexto.LocalizarPassageiros(tripulantes);
-            localizacaoAtual += builderTexto.LocalizarSmartForTwo(smartForTwo);
-
-            instrucoes.MostrarMensagem(string.Format("{0}{1}{2}", instrucoes.Cabecalho, localizacaoAtual, OPCOES));
-        }
-
         protected bool EhFimJogo(List<Passageiro> passageiros)
         {
-            if (!passageiros.Exists(x => x.Localizacao.Equals(Localizacoes.AEROPORTO)))
+            if (!passageiros.Exists(x => x.Localizacao.Equals(BibliotecaLocalizacao.AEROPORTO)))
             {
-                builderTexto.LancarMensagemInformativa("Parabéns, você conseguiu levar toda a tripulação em segurança!!!", "Parabéns");
+                builderTexto.LancarMensagemInformativa(Biblioteca.PARABENIZAR, Biblioteca.PARABENS);
                 return true;
             }
 

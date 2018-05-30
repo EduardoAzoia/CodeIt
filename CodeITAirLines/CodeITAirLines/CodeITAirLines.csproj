@@ -49,18 +49,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aeroporto\Localizacoes.cs" />
+    <Compile Include="Jogo\Bibliotecas\BibliotecaLocalizacao.cs" />
     <Compile Include="Jogo\Acoes.cs" />
     <Compile Include="Jogo\AcoesFactory.cs" />
+    <Compile Include="Jogo\Bibliotecas\Biblioteca.cs" />
     <Compile Include="Jogo\BuilderTexto.cs" />
+    <Compile Include="Jogo\Interfaces\IAcoes.cs" />
+    <Compile Include="Jogo\Interfaces\IBuilderTexto.cs" />
+    <Compile Include="Jogo\Interfaces\IInstrucoes.cs" />
     <Compile Include="Jogo\Instrucoes.cs" />
-    <Compile Include="Jogo\Validacoes.cs" />
+    <Compile Include="Jogo\Interfaces\IValidacoesDados.cs" />
+    <Compile Include="Jogo\ValidacoesDados.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tripulantes\BuilderPassageiros.cs" />
-    <Compile Include="Tripulantes\IParceiros.cs" />
+    <Compile Include="Tripulantes\Interfaces\IBuilderPassageiros.cs" />
+    <Compile Include="Tripulantes\Interfaces\IParceiros.cs" />
+    <Compile Include="Tripulantes\Interfaces\IValidacoesTripulantes.cs" />
     <Compile Include="Tripulantes\TripulantesVoo.cs" />
-    <Compile Include="Tripulantes\Validacoes.cs" />
+    <Compile Include="Tripulantes\ValidacoesTripulantes.cs" />
+    <Compile Include="Veiculo\ISmartForTwo.cs" />
     <Compile Include="Veiculo\Motorista.cs" />
     <Compile Include="Veiculo\Passageiro.cs" />
     <Compile Include="Veiculo\SmartForTwo.cs" />
@@ -70,6 +78,7 @@
     <Compile Include="Tripulantes\TribulacaoCabine\Comissaria.cs" />
     <Compile Include="Tripulantes\TripulacaoTecninca\Oficial.cs" />
     <Compile Include="Tripulantes\TripulacaoTecninca\Piloto.cs" />
+    <Compile Include="Veiculo\SmartForTwoFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

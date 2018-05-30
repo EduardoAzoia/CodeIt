@@ -1,22 +1,19 @@
-﻿using CodeITAirLines.Aeroporto;
+﻿using CodeITAirLines.Jogo;
+using CodeITAirLines.Tripulantes.Interfaces;
 using CodeITAirLines.Veiculo;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CodeITAirLines.Tripulantes
 {
-    public class Validacoes
+    public class ValidacoesTripulantes : IValidacoesTripulantes
     {
-        private const string SEM_MOTORISTAS = "Os tripulantes {0} e {1}, não estão capacitados para operarem o SmartForTwo.";
-        private const string SEM_MOTORISTA = "Os tripulante {0} não está capacitado para operar o SmartForTwo.";
-        private const string SEM_SUPERIOR = "Os tripulantes {0} e {1}, não podem ficar a sós.";
-
         public bool ValidarHierarquias(List<Passageiro> passageiros, out string mensagem)
         {
             mensagem = string.Empty;
 
-            var aeroporto = passageiros.Select(x => x).Where(x => x.Localizacao == Localizacoes.AEROPORTO).ToList();
-            var aviao = passageiros.Select(x => x).Where(x => x.Localizacao == Localizacoes.AVIAO).ToList();
+            var aeroporto = passageiros.Select(x => x).Where(x => x.Localizacao == BibliotecaLocalizacao.AEROPORTO).ToList();
+            var aviao = passageiros.Select(x => x).Where(x => x.Localizacao == BibliotecaLocalizacao.AVIAO).ToList();
 
             mensagem = ValidarHierarquias(aeroporto);
             mensagem += ValidarHierarquias(aviao);
@@ -62,7 +59,7 @@ namespace CodeITAirLines.Tripulantes
                             naoParceiro = !existePolicial;
 
                         if (naoParceiro)
-                            mensagem = string.Format(SEM_SUPERIOR, primeiroPassageiro.Nome, segundoPassageiro.Nome);
+                            mensagem = string.Format(Biblioteca.SEM_SUPERIOR, primeiroPassageiro.Nome, segundoPassageiro.Nome);
                     }
                 }
 
@@ -97,12 +94,12 @@ namespace CodeITAirLines.Tripulantes
             var segundoPassageiro = passageiros.Last();
 
             if (!ExisteMotorista(passageiros))
-                return string.Format(SEM_MOTORISTAS, primeiroPassageiro.Nome, segundoPassageiro.Nome);
+                return string.Format(Biblioteca.SEM_MOTORISTAS, primeiroPassageiro.Nome, segundoPassageiro.Nome);
 
             var exiteSuperior = ValidarHieraquias(primeiroPassageiro, segundoPassageiro);
 
             if (!exiteSuperior)
-                return string.Format(SEM_SUPERIOR, primeiroPassageiro.Nome, segundoPassageiro.Nome);
+                return string.Format(Biblioteca.SEM_SUPERIOR, primeiroPassageiro.Nome, segundoPassageiro.Nome);
 
             return string.Empty;
         }
@@ -112,7 +109,7 @@ namespace CodeITAirLines.Tripulantes
             var primeiroPassageiro = passageiro.First();
 
             if (!ExisteMotorista(passageiro))
-                return string.Format(SEM_MOTORISTA, primeiroPassageiro.Nome);
+                return string.Format(Biblioteca.SEM_MOTORISTA, primeiroPassageiro.Nome);
 
             return string.Empty; ;
         }
@@ -128,7 +125,7 @@ namespace CodeITAirLines.Tripulantes
 
             if (passageiros.Exists(x => x.Localizacao != localizacao))
             {
-                mensagem = "Os passageiros devem estar próximo ao veículo!";
+                mensagem = Biblioteca.LONGE_DO_CARRO;
                 return false;
             }
 

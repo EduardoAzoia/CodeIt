@@ -1,4 +1,4 @@
-﻿using CodeITAirLines.Aeroporto;
+﻿using CodeITAirLines.Jogo.Interfaces;
 using CodeITAirLines.Tripulantes;
 using CodeITAirLines.Veiculo;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace CodeITAirLines.Jogo
 {
-    public class BuilderTexto
+    public class BuilderTexto : IBuilderTexto
     {
         #region FORMATACAO
 
@@ -25,21 +25,21 @@ namespace CodeITAirLines.Jogo
 
         public string LocalizarPassageiros(List<Passageiro> passageiros)
         {
-            var situacaoAtual = string.Format(FORMATACAO_CABECALHO, Localizacoes.AEROPORTO, Localizacoes.AVIAO);
+            var situacaoAtual = string.Format(FORMATACAO_CABECALHO, BibliotecaLocalizacao.AEROPORTO, BibliotecaLocalizacao.AVIAO);
 
             passageiros.ToList().ForEach(x =>
             {
-                var EhAeroporto = x.Localizacao == Localizacoes.AEROPORTO;
-                var id = (long) builderTripulantes.ObterValorEnum(x.Nome);
+                var EhAeroporto = x.Localizacao == BibliotecaLocalizacao.AEROPORTO;
+                var id = (long)builderTripulantes.ObterValorEnum(x.Nome);
                 situacaoAtual += MontarFrase(EhAeroporto, string.Format(" {0} - {1}", id, x.Nome));
             });
 
             return situacaoAtual;
         }
 
-        public string LocalizarSmartForTwo(SmartForTwo smartForTwo)
+        public string LocalizarSmartForTwo(ISmartForTwo smartForTwo)
         {
-            var ehAeroporto = smartForTwo.Localizacao == Localizacoes.AEROPORTO;
+            var ehAeroporto = smartForTwo.Localizacao == BibliotecaLocalizacao.AEROPORTO;
             var situacaoSmartForTwo = ehAeroporto ? smartForTwo.SmartForTwoIndo : smartForTwo.SmartForTwoVoltando;
             return MontarFrase(ehAeroporto, situacaoSmartForTwo);
         }

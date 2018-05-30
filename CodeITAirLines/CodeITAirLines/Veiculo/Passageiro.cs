@@ -1,10 +1,7 @@
-﻿using CodeITAirLines.Aeroporto;
-using CodeITAirLines.Tripulantes;
+﻿using CodeITAirLines.Jogo;
+using CodeITAirLines.Tripulantes.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodeITAirLines.Veiculo
 {
@@ -16,11 +13,13 @@ namespace CodeITAirLines.Veiculo
 
         public Passageiro()
         {
-            Localizacao = Localizacoes.AEROPORTO;
+            Localizacao = BibliotecaLocalizacao.AEROPORTO;
         }
 
         public abstract List<Type> ObterParceiros();
+
         public abstract List<Type> ObterNaoParceiros();
+
         public abstract List<Type> ObterSuperior();
     }
 }

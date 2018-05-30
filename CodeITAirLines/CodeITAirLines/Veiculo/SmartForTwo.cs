@@ -1,19 +1,11 @@
-﻿using CodeITAirLines.Aeroporto;
-using CodeITAirLines.Jogo;
-using CodeITAirLines.Tripulantes;
-using CodeITAirLines.Tripulantes.TribulacaoCabine;
-using CodeITAirLines.Tripulantes.TripulacaoTecninca;
-using System;
+﻿using CodeITAirLines.Jogo;
+using CodeITAirLines.Jogo.Interfaces;
+using CodeITAirLines.Tripulantes.Interfaces;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodeITAirLines.Veiculo
 {
-    public class SmartForTwo
+    public class SmartForTwo : ISmartForTwo
     {
         public string Localizacao { get; set; }
 
@@ -35,21 +27,19 @@ namespace CodeITAirLines.Veiculo
 
         #endregion SMART_FOR_TWO
 
-        private const string VIOLACAO = "Violação das regras da empresa";
+        private readonly IBuilderPassageiros builderPassageiros;
+        private readonly IBuilderTexto builderTexto;
+        private readonly IValidacoesTripulantes validacoesTripulantes;
 
-        private readonly BuilderPassageiros builderPassageiros;
-        private readonly BuilderTexto builderTexto;
-        private readonly Tripulantes.Validacoes validacoes;
-
-        public SmartForTwo(BuilderPassageiros builderPassageiros,
-                                 BuilderTexto builderTexto,
-                       Tripulantes.Validacoes validacoes)
+        public SmartForTwo(IBuilderPassageiros builderPassageiros,
+                                 IBuilderTexto builderTexto,
+                        IValidacoesTripulantes validacoesTripulantes)
         {
             this.builderPassageiros = builderPassageiros;
             this.builderTexto = builderTexto;
-            this.validacoes = validacoes;
+            this.validacoesTripulantes = validacoesTripulantes;
 
-            Localizacao = Localizacoes.AEROPORTO;
+            Localizacao = BibliotecaLocalizacao.AEROPORTO;
         }
 
         public void TrafegarPassageiros(List<string> caracteres)
@@ -60,18 +50,18 @@ namespace CodeITAirLines.Veiculo
 
             caracteres.ForEach(x => passageiros.Add(builderPassageiros.ObterPassageiro(x)));
 
-            if (!validacoes.PassageirosProximosAoVeiculo(passageiros, Localizacao, out mensagem))
+            if (!validacoesTripulantes.PassageirosProximosAoVeiculo(passageiros, Localizacao, out mensagem))
             {
-                builderTexto.LancarMensagemDeAtencao(mensagem, "Atenção");
+                builderTexto.LancarMensagemDeAtencao(mensagem, Biblioteca.ATENCAO);
                 return;
             }
 
             if (passageiros.Exists(x => x.Dirigir != true))
-                mensagem = passageiros.Count > 1 ? validacoes.ValidarTripulantes(passageiros) : validacoes.ValidarTripulante(passageiros);
+                mensagem = passageiros.Count > 1 ? validacoesTripulantes.ValidarTripulantes(passageiros) : validacoesTripulantes.ValidarTripulante(passageiros);
 
             if (!string.IsNullOrWhiteSpace(mensagem))
             {
-                builderTexto.LancarMensagemDeAtencao(mensagem, VIOLACAO);
+                builderTexto.LancarMensagemDeAtencao(mensagem, Biblioteca.VIOLACAO);
                 return;
             }
 
@@ -80,13 +70,13 @@ namespace CodeITAirLines.Veiculo
 
         private void AlterarAtributos(List<Passageiro> passageiros)
         {
-            Localizacao = Localizacao.Equals(Localizacoes.AEROPORTO) ? Localizacoes.AVIAO : Localizacoes.AEROPORTO;
+            Localizacao = Localizacao.Equals(BibliotecaLocalizacao.AEROPORTO) ? BibliotecaLocalizacao.AVIAO : BibliotecaLocalizacao.AEROPORTO;
             passageiros.ForEach(x => x.Localizacao = Localizacao);
             var mensagem = string.Empty;
 
-            if (!validacoes.ValidarHierarquias(builderPassageiros.ListaPassageiros, out mensagem))
+            if (!validacoesTripulantes.ValidarHierarquias(builderPassageiros.ListaPassageiros, out mensagem))
             {
-                builderTexto.LancarMensagemDeAtencao(mensagem, VIOLACAO);
+                builderTexto.LancarMensagemDeAtencao(mensagem, Biblioteca.VIOLACAO);
                 AlterarAtributos(passageiros);
             }
         }
