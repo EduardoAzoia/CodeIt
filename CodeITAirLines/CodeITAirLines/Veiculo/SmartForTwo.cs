@@ -1,4 +1,5 @@
-﻿using CodeITAirLines.Tripulantes;
+﻿using CodeITAirLines.Aeroporto;
+using CodeITAirLines.Tripulantes;
 using CodeITAirLines.Tripulantes.TribulacaoCabine;
 using CodeITAirLines.Tripulantes.TripulacaoTecninca;
 using System;
@@ -31,5 +32,9 @@ namespace CodeITAirLines.Veiculo
 
         #endregion SMART_FOR_TWO
 
+        public SmartForTwo()
+        {
+            Localizacao = Localizacoes.AEROPORTO;
+        }
     }
 }

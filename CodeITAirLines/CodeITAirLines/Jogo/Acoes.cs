@@ -14,7 +14,7 @@ namespace CodeITAirLines.Jogo
     {
         private readonly List<string> caracterPermitido;
 
-        private const string FALHA = "F";
+        private const string FALHA = "FALHA";
 
         #region PREFACIO_JOGO
 
@@ -31,17 +31,20 @@ Opcões:
         private readonly BuilderTripulantes builderTripulantes;
         private readonly SmartForTwo smartForTwo;
         private readonly BuilderTexto builderTexto;
+        private readonly Validacoes validacoes;
 
 
         public Acoes(Instrucoes instrucoes,
              BuilderTripulantes builderTripulantes,
                     SmartForTwo smartForTwo,
-                   BuilderTexto builderTexto)
+                   BuilderTexto builderTexto,
+                     Validacoes validacoes)
         {
             this.instrucoes = instrucoes;
             this.builderTripulantes = builderTripulantes;
             this.smartForTwo = smartForTwo;
             this.builderTexto = builderTexto;
+            this.validacoes = validacoes;
 
             caracterPermitido = new List<string> { "R", "X" };
         }
@@ -55,18 +58,19 @@ Opcões:
             if (!iniciarJogo)
                 return;
 
-            bool fimDeJogo = true;
+            bool fimDeJogo = false;
+            var passageiros = new List<string>();
 
-            while (fimDeJogo)
+            while (!fimDeJogo)
             {
                 PrefacioJogo();
-                ValidarLeituraDados();
-                 
-                fimDeJogo = false;
+                var acao = ValidarLeituraDados(out passageiros);
+                
+                fimDeJogo = TomarAcao(acao, passageiros);
             }
         }
 
-        private bool TomarAcao(string acao, List<char> passageiros = null)
+        private bool TomarAcao(string acao, List<string> passageiros)
         {
             switch (acao)
             {
@@ -77,31 +81,32 @@ Opcões:
                     break;
                 case "X":
                     return true;
-                case FALHA:
-                    MessageBox.Show("Por favor, digita essa merda direito");
+                case "FALHA":
+                    MessageBox.Show("Operação inválida!\nSe ainda possuir dúvidas acesse o menu de regras.");
                     break;
             }
 
             return false;
         }
         
-        private void ValidarLeituraDados()
+        private string ValidarLeituraDados(out List<string> passageiros)
         {
-            var resposta = Console.ReadLine().ToCharArray().ToList();
+            passageiros = new List<string>();
 
-            if (resposta.Exists(x => x == ';'))
-                return;
-            else if (resposta.Count == 1)
+            var resposta = Console.ReadLine().ToCharArray();
+
+            if (resposta.ToList().Exists(x => x == ';'))
+                validacoes.ValidarDados(resposta, out passageiros);
+
+            else if (resposta.Length == 1)
             {
                 var frase = resposta.First().ToString().ToUpper();
                 var ehCaracterPermitido = caracterPermitido.Exists(x => x.Equals(frase));
 
-                frase = ehCaracterPermitido ? frase : FALHA;
-
-                TomarAcao(frase);
+                return ehCaracterPermitido ? frase : FALHA;
             }
-            else
-                MessageBox.Show("Por favor, digita essa merda direito");
+
+            return FALHA;
         }
 
         public void PrefacioJogo()

@@ -9,4 +9,3 @@ C:\Git\CodeIT\CodeITAirLines\CodeITAirLines\bin\Debug\Simplify.Resources.dll
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLines\bin\Debug\Simplify.Windows.Forms.dll
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLines\bin\Debug\Simplify.Resources.xml
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLines\bin\Debug\Simplify.Windows.Forms.xml
-C:\GIT\CodeIt\CodeITAirLines\CodeITAirLines\obj\Debug\CodeITAirLines.csproj.CopyComplete

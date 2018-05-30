@@ -11,3 +11,7 @@ C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\obj\Debug\CodeITAirLinesTests.c
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\obj\Debug\CodeITAirLinesTests.csproj.CoreCompileInputs.cache
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\obj\Debug\CodeITAirLinesTests.dll
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\obj\Debug\CodeITAirLinesTests.pdb
+C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\bin\Debug\Simplify.Resources.dll
+C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\bin\Debug\Simplify.Windows.Forms.dll
+C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\bin\Debug\Simplify.Resources.xml
+C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\bin\Debug\Simplify.Windows.Forms.xml

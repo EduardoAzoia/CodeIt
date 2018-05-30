@@ -23,47 +23,37 @@ namespace CodeITAirLines.Jogo
             return listaRetorno;
         }
 
-        public string ValidarDados(List<char> caracteres, out List<string> passageiros)
+        public string ValidarDados(char[] caracteres, out List<string> passageiros)
         {
             try
             {
-                return ValidarCaracteres(caracteres, out passageiros);
+                if (caracteres.Length > 3)
+                    LancarExcessao();
+
+                var resposta = new string(caracteres);
+                var passageirosLocais = resposta.Split(';').ToList();
+                var listaCarateres = MontarListaCaracteresPermitidos();
+
+                var primeiroPassageiro = listaCarateres.Exists(x => x.Equals(passageirosLocais.First()));
+                var segundoPassageiro = listaCarateres.Exists(x => x.Equals(passageirosLocais.Last()));
+
+                if (!primeiroPassageiro || !segundoPassageiro)
+                    LancarExcessao();
+
+                passageiros = passageirosLocais;
+
+                return "P";
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
-
                 passageiros = new List<string>();
-
-                return "Falha";
+                return e.ToString();
             }
-        }
-
-        private string ValidarCaracteres(List<char> caracteres, out List<string> passageiros)
-        { 
-            if (caracteres.Count > 3)
-                LancarExcessao();
-
-            var resposta = caracteres.ToString();
-
-            var passageirosLocais = resposta.Split(';').ToList();
-
-            var listaCarateres = MontarListaCaracteresPermitidos();
-
-            var primeiroPassageiro = listaCarateres.Exists(x => x.Equals(passageirosLocais.First()));
-            var segundoPassageiro = listaCarateres.Exists(x => x.Equals(passageirosLocais.Last()));
-
-            if (!primeiroPassageiro || !segundoPassageiro)
-                LancarExcessao();
-
-            passageiros = passageirosLocais;
-
-            return "P";
         }
 
         private void LancarExcessao()
         {
-            throw new Exception("Solicitação inválida, dúvidas consultar as regras!");
+            throw new Exception("FALHA");
         }
     }
 }

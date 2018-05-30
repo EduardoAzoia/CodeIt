@@ -1,11 +1,8 @@
 ﻿using CodeITAirLines.Aeroporto;
 using CodeITAirLines.Tripulantes;
 using CodeITAirLines.Veiculo;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodeITAirLines.Jogo
 {
@@ -18,11 +15,11 @@ namespace CodeITAirLines.Jogo
 
         #endregion FORMATACAO
 
-        private readonly BuilderTripulantes dicionarioPassageiros;
+        private readonly BuilderTripulantes builderTripulantes;
 
-        public BuilderTexto(BuilderTripulantes dicionarioPassageiros)
+        public BuilderTexto(BuilderTripulantes builderTripulantes)
         {
-            this.dicionarioPassageiros = dicionarioPassageiros;
+            this.builderTripulantes = builderTripulantes;
         }
 
         public string LocalizarPassageiros(List<Passageiro> passageiros)

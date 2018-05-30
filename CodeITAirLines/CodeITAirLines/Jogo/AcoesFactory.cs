@@ -13,11 +13,12 @@ namespace CodeITAirLines.Jogo
     {
         public Acoes Obter()
         {
-            var dicionarioPasageiros = new BuilderTripulantes();
+            var builderTripulantes = new BuilderTripulantes();
             return new Acoes(new Instrucoes(),
-                             dicionarioPasageiros,
-                             new SmartForTwo { Localizacao = Localizacoes.AEROPORTO },
-                             new BuilderTexto(dicionarioPasageiros));
+                             builderTripulantes,
+                             new SmartForTwo(),
+                             new BuilderTexto(builderTripulantes),
+                             new Validacoes());
         }
     }
 }

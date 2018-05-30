@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CodeITAirLines.Aeroporto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,10 @@ namespace CodeITAirLines.Veiculo
     {
         public string Localizacao { get; set; }
         public string Nome { get; set; }
+
+        public Passageiro()
+        {
+            Localizacao = Localizacoes.AEROPORTO;
+        }
     }
 }
