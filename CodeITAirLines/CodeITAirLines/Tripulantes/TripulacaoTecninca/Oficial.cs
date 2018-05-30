@@ -1,14 +1,16 @@
-﻿using CodeITAirLines.Veiculo;
+﻿using CodeITAirLines.Tripulantes.TribulacaoCabine;
+using CodeITAirLines.Veiculo;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodeITAirLines.Tripulantes.TripulacaoTecninca
 {
-    public class Oficial : Passageiro, ISubordinado
+    public class Oficial : Passageiro
     {
-        public List<Type> ObterSuperiores() => new List<Type> { typeof(Piloto).GetType(), typeof(Policial).GetType() };
+        public override List<Type> ObterNaoParceiros() => new List<Type> { typeof(ChefeVoo), typeof(Presidiario)};
+
+        public override List<Type> ObterParceiros() => new List<Type> { typeof(Piloto), typeof(Policial)};
+
+        public override List<Type> ObterSuperior() => new List<Type> { typeof(Piloto) };
     }
 }

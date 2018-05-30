@@ -13,11 +13,7 @@ namespace CodeITAirLines
     {
         static void Main(string[] args)
         {
-            var acoes = new AcoesFactory().Obter();
-
-            acoes.Jogar();
-
-            acoes.instrucoes.FimDeJogo();
+            new AcoesFactory().Obter().Jogar();
         }
     }
 }

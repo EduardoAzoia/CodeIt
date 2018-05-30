@@ -55,7 +55,7 @@ Existem cinco regras para o transporte dos mesmos:
 Como jogar:
 
 - Digite a siglas daqueles que forem entrar no veículo, como no exemplo abaixo
-  Ex: 0;1 - 0 para o Capitão e 1 para 1º Oficiail";
+  Ex: 0;1 - 0 para o Capitão e 1 para 1º Oficial ou 0 - para apenas o Capitão";
 
         #endregion REGRAS
 
@@ -70,15 +70,24 @@ Como jogar:
 
         #endregion FIM_DE_JOGO
 
+        private readonly BuilderTexto builderTexto;
+
+        public Instrucoes(BuilderTexto builderTexto)
+        {
+            this.builderTexto = builderTexto;
+        }
+
         public void MostrarInstrucoes()
         {
             MostrarMensagem(string.Format("{0}{1}", CABECALHO, PREFACIO));
+            Console.Read();
             MostrarMensagem(string.Format("{0}{1}", CABECALHO, REGRAS));
+            Console.Read();
         }
 
         public void MostrarRegras()
         {
-            MessageBox.Show(string.Format("{0}{1}", PREFACIO, REGRAS));
+            builderTexto.LancarMensagemInformativa(string.Format("{0}{1}", PREFACIO, REGRAS), "Regras");
         }
          
         public bool IniciarJogo()
@@ -93,13 +102,13 @@ Como jogar:
         public void FimDeJogo()
         {
             MostrarMensagem(string.Format("{0}{1}", CABECALHO, FIM_DE_JOGO));
+            Console.Read();
         }
 
         public void MostrarMensagem(string mensagem)
         {
             Console.Clear();
             Console.WriteLine(mensagem);
-            Console.Read();
         }
 
         public string LerResposta(List<String> caracteres)

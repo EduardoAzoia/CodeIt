@@ -3,14 +3,17 @@ using CodeITAirLines.Tripulantes.TripulacaoTecninca;
 using CodeITAirLines.Veiculo;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CodeITAirLines.Tripulantes
 {
-    public class BuilderTripulantes
+    public class BuilderPassageiros
     {
-        public List<Passageiro> ObterPassageiros()
+        public List<Passageiro> ListaPassageiros { get; set; }
+
+        public void MontarListaPassageiros()
         {
-            return new List<Passageiro>
+            ListaPassageiros = new List<Passageiro>
             {
                 ObterNovoPiloto(TripulantesVoo.Piloto),
                 ObterNovoOficial(TripulantesVoo.Primeiro_Oficial),
@@ -23,9 +26,12 @@ namespace CodeITAirLines.Tripulantes
             };
         }
 
-        public Passageiro ObterPassageiro(int tripulante)
+        public Passageiro ObterPassageiro(string valor)
         {
-            return ObterPassageiros()[tripulante];
+            var enumerador = ObterValorEnum(valor);
+            var nome = ObterNomeEnum(enumerador);
+
+            return ListaPassageiros.Select(x => x).Where(x => x.Nome.Equals(nome)).First();
         }
 
         public Piloto ObterNovoPiloto<T>(T valor) => new Piloto { Nome = ObterNomeEnum(valor) };
@@ -42,7 +48,7 @@ namespace CodeITAirLines.Tripulantes
 
         public string ObterNomeEnum<T>(T valor) => Enum.GetName(typeof(TripulantesVoo), valor);
 
-        public object ObterValorEnum(string valor)
+        public TripulantesVoo ObterValorEnum(string valor)
         {
             var enumerador = new TripulantesVoo();
             Enum.TryParse(valor, out enumerador);

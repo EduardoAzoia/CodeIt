@@ -3,6 +3,7 @@ using CodeITAirLines.Tripulantes;
 using CodeITAirLines.Veiculo;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace CodeITAirLines.Jogo
 {
@@ -15,9 +16,9 @@ namespace CodeITAirLines.Jogo
 
         #endregion FORMATACAO
 
-        private readonly BuilderTripulantes builderTripulantes;
+        private readonly BuilderPassageiros builderTripulantes;
 
-        public BuilderTexto(BuilderTripulantes builderTripulantes)
+        public BuilderTexto(BuilderPassageiros builderTripulantes)
         {
             this.builderTripulantes = builderTripulantes;
         }
@@ -29,7 +30,8 @@ namespace CodeITAirLines.Jogo
             passageiros.ToList().ForEach(x =>
             {
                 var EhAeroporto = x.Localizacao == Localizacoes.AEROPORTO;
-                situacaoAtual += MontarFrase(EhAeroporto, x.Nome);
+                var id = (long) builderTripulantes.ObterValorEnum(x.Nome);
+                situacaoAtual += MontarFrase(EhAeroporto, string.Format(" {0} - {1}", id, x.Nome));
             });
 
             return situacaoAtual;
@@ -47,6 +49,16 @@ namespace CodeITAirLines.Jogo
             return ehAeroporto ?
                 string.Format(FORMATACAO, nome, string.Empty) :
                 string.Format(FORMATACAO, new string(' ', 9), nome);
+        }
+
+        public void LancarMensagemDeAtencao(string mensagem, string titulo)
+        {
+            MessageBox.Show(mensagem, titulo, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        public void LancarMensagemInformativa(string mensagem, string titulo)
+        {
+            MessageBox.Show(mensagem, titulo, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

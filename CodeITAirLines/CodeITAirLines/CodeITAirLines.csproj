@@ -57,10 +57,10 @@
     <Compile Include="Jogo\Validacoes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tripulantes\BuilderTripulantes.cs" />
-    <Compile Include="Tripulantes\ISubordinado.cs" />
+    <Compile Include="Tripulantes\BuilderPassageiros.cs" />
+    <Compile Include="Tripulantes\IParceiros.cs" />
     <Compile Include="Tripulantes\TripulantesVoo.cs" />
-    <Compile Include="Veiculo\IMotorista.cs" />
+    <Compile Include="Tripulantes\Validacoes.cs" />
     <Compile Include="Veiculo\Motorista.cs" />
     <Compile Include="Veiculo\Passageiro.cs" />
     <Compile Include="Veiculo\SmartForTwo.cs" />

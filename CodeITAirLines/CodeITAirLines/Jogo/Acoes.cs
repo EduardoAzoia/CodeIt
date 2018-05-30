@@ -4,49 +4,45 @@ using CodeITAirLines.Veiculo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CodeITAirLines.Jogo
 {
     public class Acoes
     {
-        private readonly List<string> caracterPermitido;
+        private readonly List<string> caractersPermitidosMenu;
 
         private const string FALHA = "FALHA";
 
-        #region PREFACIO_JOGO
+        #region OPCOES
 
-        private const string PREFACIO_JOGO = @"
+        private const string OPCOES = @"
 
 Opcões:
 - Digite quem vai para o SmartForTwo, ex: 0;1;
 - Digite 'R' para ler as regras novamente
 - Digite 'X' para sair do jogo";
 
-        #endregion PREFACIO_JOGO
+        #endregion OPCOES
 
-        public Instrucoes instrucoes;
-        private readonly BuilderTripulantes builderTripulantes;
+        private readonly Instrucoes instrucoes;
+        private readonly BuilderPassageiros builderPassageiros;
         private readonly SmartForTwo smartForTwo;
         private readonly BuilderTexto builderTexto;
         private readonly Validacoes validacoes;
 
-
         public Acoes(Instrucoes instrucoes,
-             BuilderTripulantes builderTripulantes,
+             BuilderPassageiros builderPassageiros,
                     SmartForTwo smartForTwo,
                    BuilderTexto builderTexto,
                      Validacoes validacoes)
         {
             this.instrucoes = instrucoes;
-            this.builderTripulantes = builderTripulantes;
+            this.builderPassageiros = builderPassageiros;
             this.smartForTwo = smartForTwo;
             this.builderTexto = builderTexto;
             this.validacoes = validacoes;
 
-            caracterPermitido = new List<string> { "R", "X" };
+            caractersPermitidosMenu = new List<string> { "R", "X" };
         }
 
         public void Jogar()
@@ -59,49 +55,65 @@ Opcões:
                 return;
 
             bool fimDeJogo = false;
-            var passageiros = new List<string>();
+            var passageirosSmartForTwo = new List<string>();
+            builderPassageiros.MontarListaPassageiros();
 
             while (!fimDeJogo)
             {
-                PrefacioJogo();
-                var acao = ValidarLeituraDados(out passageiros);
-                
-                fimDeJogo = TomarAcao(acao, passageiros);
+                PrefacioJogo(builderPassageiros.ListaPassageiros);
+                var acao = ValidarLeituraDados(out passageirosSmartForTwo);
+
+                fimDeJogo = TomarAcao(acao, passageirosSmartForTwo);
             }
+
+            PrefacioJogo(builderPassageiros.ListaPassageiros);
+            Console.Read();
+            instrucoes.FimDeJogo();
         }
 
-        private bool TomarAcao(string acao, List<string> passageiros)
+        protected bool TomarAcao(string acao, List<string> passageiros)
         {
             switch (acao)
             {
                 case "P":
-                    break;
+                    smartForTwo.TrafegarPassageiros(passageiros);
+                    return EhFimJogo(builderPassageiros.ListaPassageiros);
+
                 case "R":
                     instrucoes.MostrarRegras();
                     break;
+
                 case "X":
                     return true;
+
                 case "FALHA":
-                    MessageBox.Show("Operação inválida!\nSe ainda possuir dúvidas acesse o menu de regras.");
+                    builderTexto.LancarMensagemDeAtencao(string.Format("Digite uma das opções citadas abaixo:{0}", OPCOES), "Operação inválida");
                     break;
             }
 
             return false;
         }
-        
-        private string ValidarLeituraDados(out List<string> passageiros)
+
+        protected string ValidarLeituraDados(out List<string> passageiros)
         {
             passageiros = new List<string>();
 
             var resposta = Console.ReadLine().ToCharArray();
 
             if (resposta.ToList().Exists(x => x == ';'))
-                validacoes.ValidarDados(resposta, out passageiros);
-
+                return validacoes.ValidarDados(resposta, out passageiros);
             else if (resposta.Length == 1)
             {
                 var frase = resposta.First().ToString().ToUpper();
-                var ehCaracterPermitido = caracterPermitido.Exists(x => x.Equals(frase));
+
+                var ehCaracterPermitido = caractersPermitidosMenu.Exists(x => x.Equals(frase));
+
+                if (validacoes.ListaIdTripulantes.Exists(x => x.Equals(frase)))
+                {
+                    passageiros.Add(frase);
+                    frase = "P";
+                    ehCaracterPermitido = true;
+                }
 
                 return ehCaracterPermitido ? frase : FALHA;
             }
@@ -109,14 +121,23 @@ Opcões:
             return FALHA;
         }
 
-        public void PrefacioJogo()
+        protected void PrefacioJogo(List<Passageiro> tripulantes)
         {
-            var passageiros = builderTripulantes.ObterPassageiros();
-
-            var localizacaoAtual = builderTexto.LocalizarPassageiros(passageiros);
+            var localizacaoAtual = builderTexto.LocalizarPassageiros(tripulantes);
             localizacaoAtual += builderTexto.LocalizarSmartForTwo(smartForTwo);
 
-            instrucoes.MostrarMensagem(string.Format("{0}{1}{2}", instrucoes.Cabecalho, localizacaoAtual, PREFACIO_JOGO));
+            instrucoes.MostrarMensagem(string.Format("{0}{1}{2}", instrucoes.Cabecalho, localizacaoAtual, OPCOES));
+        }
+
+        protected bool EhFimJogo(List<Passageiro> passageiros)
+        {
+            if (!passageiros.Exists(x => x.Localizacao.Equals(Localizacoes.AEROPORTO)))
+            {
+                builderTexto.LancarMensagemInformativa("Parabéns, você conseguiu levar toda a tripulação em segurança!!!", "Parabéns");
+                return true;
+            }
+
+            return false;
         }
     }
 }

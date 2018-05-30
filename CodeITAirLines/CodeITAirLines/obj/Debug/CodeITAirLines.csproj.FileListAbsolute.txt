@@ -1,4 +1,3 @@
-C:\Git\CodeIT\CodeITAirLines\CodeITAirLines\obj\Debug\CodeITAirLines.csprojResolveAssemblyReference.cache
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLines\obj\Debug\CodeITAirLines.csproj.CoreCompileInputs.cache
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLines\bin\Debug\CodeITAirLines.exe.config
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLines\bin\Debug\CodeITAirLines.exe

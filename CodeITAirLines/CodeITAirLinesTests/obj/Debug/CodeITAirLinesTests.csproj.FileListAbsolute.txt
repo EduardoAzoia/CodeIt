@@ -7,7 +7,6 @@ C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\bin\Debug\Microsoft.VisualStudi
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
-C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\obj\Debug\CodeITAirLinesTests.csprojResolveAssemblyReference.cache
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\obj\Debug\CodeITAirLinesTests.csproj.CoreCompileInputs.cache
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\obj\Debug\CodeITAirLinesTests.dll
 C:\Git\CodeIT\CodeITAirLines\CodeITAirLinesTests\obj\Debug\CodeITAirLinesTests.pdb

@@ -6,6 +6,6 @@ namespace CodeITAirLines.Tripulantes.TribulacaoCabine
 {
     public class ChefeVoo : Motorista
     {
-        public override List<Type> ObterSubordinados() => new List<Type> { typeof(Comissaria).GetType() };
+        public override List<Type> ObterNaoParceiros() => new List<Type> { typeof(Comissaria) };
     }
 }

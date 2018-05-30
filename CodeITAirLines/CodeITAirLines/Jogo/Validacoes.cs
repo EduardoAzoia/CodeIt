@@ -2,58 +2,57 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CodeITAirLines.Jogo
 {
     public class Validacoes
     {
-        private List<string> MontarListaCaracteresPermitidos()
+        private const string FALHA = "FALHA";
+        public List<string> ListaIdTripulantes { get; set; }
+
+        public Validacoes()
         {
-            var listaEnum = Enum.GetValues(typeof(TripulantesVoo));
-            var listaRetorno = new List<string>();
+            MontarListaCaracteresPermitidos();
+        }
+
+        private void MontarListaCaracteresPermitidos()
+        {
+            var listaEnum = Enum.GetValues(typeof(TripulantesVoo))
+                .Cast<TripulantesVoo>()
+                .Select(x => Convert.ToInt64(x).ToString());
+
+            var ListaIdTripulantes = new List<string>();
 
             foreach (var enumerador in listaEnum)
             {
-                listaRetorno.Add(enumerador.ToString());
+                ListaIdTripulantes.Add(enumerador);
             }
 
-            return listaRetorno;
+            this.ListaIdTripulantes = ListaIdTripulantes;
         }
 
         public string ValidarDados(char[] caracteres, out List<string> passageiros)
         {
-            try
-            {
-                if (caracteres.Length > 3)
-                    LancarExcessao();
+            passageiros = new List<string>();
 
-                var resposta = new string(caracteres);
-                var passageirosLocais = resposta.Split(';').ToList();
-                var listaCarateres = MontarListaCaracteresPermitidos();
+            if (caracteres.Length != 3)
+                return FALHA;
 
-                var primeiroPassageiro = listaCarateres.Exists(x => x.Equals(passageirosLocais.First()));
-                var segundoPassageiro = listaCarateres.Exists(x => x.Equals(passageirosLocais.Last()));
+            var resposta = new string(caracteres);
+            var passageirosLocais = resposta.Split(';').ToList();
 
-                if (!primeiroPassageiro || !segundoPassageiro)
-                    LancarExcessao();
+            if (passageirosLocais.First() == passageirosLocais.Last())
+                return FALHA;
 
-                passageiros = passageirosLocais;
+            var primeiroPassageiro = ListaIdTripulantes.Exists(x => x.Equals(passageirosLocais.First()));
+            var segundoPassageiro = ListaIdTripulantes.Exists(x => x.Equals(passageirosLocais.Last()));
 
-                return "P";
-            }
-            catch (Exception e)
-            {
-                passageiros = new List<string>();
-                return e.ToString();
-            }
-        }
+            if (!primeiroPassageiro || !segundoPassageiro)
+                return FALHA;
 
-        private void LancarExcessao()
-        {
-            throw new Exception("FALHA");
+            passageiros = passageirosLocais;
+
+            return "P";
         }
     }
 }

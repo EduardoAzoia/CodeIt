@@ -1,4 +1,5 @@
 ﻿using CodeITAirLines.Aeroporto;
+using CodeITAirLines.Tripulantes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace CodeITAirLines.Veiculo
 {
-    public class Passageiro
+    public abstract class Passageiro : IParceiros
     {
+        public bool Dirigir { get; set; }
         public string Localizacao { get; set; }
         public string Nome { get; set; }
 
@@ -16,5 +18,9 @@ namespace CodeITAirLines.Veiculo
         {
             Localizacao = Localizacoes.AEROPORTO;
         }
+
+        public abstract List<Type> ObterParceiros();
+        public abstract List<Type> ObterNaoParceiros();
+        public abstract List<Type> ObterSuperior();
     }
 }
