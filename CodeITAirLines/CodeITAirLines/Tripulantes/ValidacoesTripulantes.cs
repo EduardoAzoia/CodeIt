@@ -12,16 +12,21 @@ namespace CodeITAirLines.Tripulantes
         {
             mensagem = string.Empty;
 
-            var aeroporto = passageiros.Select(x => x).Where(x => x.Localizacao == BibliotecaLocalizacao.AEROPORTO).ToList();
-            var aviao = passageiros.Select(x => x).Where(x => x.Localizacao == BibliotecaLocalizacao.AVIAO).ToList();
+            var passageirosAeroporto = ObterPassageirosViaLocalizacao(passageiros, BibliotecaLocalizacao.AEROPORTO);
+            var passageirosAviao = ObterPassageirosViaLocalizacao(passageiros, BibliotecaLocalizacao.AVIAO);
 
-            mensagem = ValidarHierarquias(aeroporto);
-            mensagem += ValidarHierarquias(aviao);
+            mensagem = ValidarHierarquias(passageirosAeroporto);
+            mensagem += ValidarHierarquias(passageirosAviao);
 
             if (!string.IsNullOrWhiteSpace(mensagem))
                 return false;
 
             return true;
+        }
+
+        private List<Passageiro> ObterPassageirosViaLocalizacao(List<Passageiro> passageiros, string localicazao)
+        {
+            return passageiros.Select(x => x).Where(x => x.Localizacao == localicazao).ToList();
         }
 
         private string ValidarHierarquias(List<Passageiro> passageiros)
@@ -32,7 +37,7 @@ namespace CodeITAirLines.Tripulantes
             var mensagem = string.Empty;
             var superior = false;
             var naoParceiro = false;
-            var existePolicial = passageiros.Exists(x => x is Policial);
+            var existePolicial = ExistePolicial(passageiros);
 
             foreach (var primeiroPassageiro in passageiros)
             {
@@ -46,20 +51,13 @@ namespace CodeITAirLines.Tripulantes
 
                     if (!superior)
                     {
-                        var superiores = primeiroPassageiro.ObterSuperior();
-                        superior = superiores.Exists(x => x.Equals(segundoPassageiro.GetType()));
+                        superior = ExisteSuperior(primeiroPassageiro, segundoPassageiro);
                     }
 
                     if (!naoParceiro)
                     {
-                        var naoParceiros = primeiroPassageiro.ObterNaoParceiros();
-                        naoParceiro = naoParceiros.Exists(x => x.Equals(segundoPassageiro.GetType()));
-
-                        if (segundoPassageiro is Presidiario)
-                            naoParceiro = !existePolicial;
-
-                        if (naoParceiro)
-                            mensagem = string.Format(Biblioteca.SEM_SUPERIOR, primeiroPassageiro.Nome, segundoPassageiro.Nome);
+                        naoParceiro = EhNaoParceiros(primeiroPassageiro, segundoPassageiro, existePolicial);
+                        mensagem = naoParceiro ? string.Format(Biblioteca.SEM_SUPERIOR, string.Join(" e ", primeiroPassageiro.Nome, segundoPassageiro.Nome)) : mensagem;
                     }
                 }
 
@@ -73,35 +71,60 @@ namespace CodeITAirLines.Tripulantes
             return string.Empty;
         }
 
-        public bool ValidarHieraquias(Passageiro primeiroPassageiro, Passageiro segundoPassageiro)
+        private bool ExisteSuperior(Passageiro primeiroPassageiro, Passageiro segundoPassageiro)
         {
-            var primeirosSuperiores = primeiroPassageiro.ObterParceiros();
+            var superiores = primeiroPassageiro.ObterSuperior();
+            return superiores.Exists(x => x.Equals(segundoPassageiro.GetType()));
+        }
 
-            if (primeirosSuperiores.Exists(x => x.Equals(segundoPassageiro.GetType())))
-                return true;
+        private bool EhNaoParceiros(List<Passageiro> passageiros)
+        {
+            var existePolicial = ExistePolicial(passageiros);
+            var ehNaoParceiro = true;
 
-            var segundosSuperiores = segundoPassageiro.ObterParceiros();
+            foreach (var primeiroPassageiro in passageiros)
+            {
+                foreach (var segundoPassageiro in passageiros)
+                {
+                    if (primeiroPassageiro.Equals(segundoPassageiro))
+                        continue;
 
-            if (segundosSuperiores.Exists(x => x.Equals(primeiroPassageiro.GetType())))
-                return true;
+                    ehNaoParceiro = EhNaoParceiros(primeiroPassageiro, segundoPassageiro, existePolicial);
+                }
+            }
 
-            return false;
+            return ehNaoParceiro;
+        }
+
+        private bool EhNaoParceiros(Passageiro primeiroPassageiro, Passageiro segundoPassageiro, bool existePolicial)
+        {
+            bool ehNaoParceiro = false;
+
+            var naoParceiros = primeiroPassageiro.ObterNaoParceiros();
+            ehNaoParceiro = naoParceiros.Exists(x => x.Equals(segundoPassageiro.GetType()));
+
+            if (segundoPassageiro is Presidiario)
+                ehNaoParceiro = !existePolicial;
+
+            return ehNaoParceiro;
         }
 
         public string ValidarTripulantes(List<Passageiro> passageiros)
         {
-            var primeiroPassageiro = passageiros.First();
-            var segundoPassageiro = passageiros.Last();
+            var nomes = string.Join(" e ", passageiros.Select(x => x.Nome));
 
             if (!ExisteMotorista(passageiros))
-                return string.Format(Biblioteca.SEM_MOTORISTAS, primeiroPassageiro.Nome, segundoPassageiro.Nome);
-
-            var exiteSuperior = ValidarHieraquias(primeiroPassageiro, segundoPassageiro);
-
-            if (!exiteSuperior)
-                return string.Format(Biblioteca.SEM_SUPERIOR, primeiroPassageiro.Nome, segundoPassageiro.Nome);
+                return string.Format(Biblioteca.SEM_MOTORISTAS, nomes);
+            
+            if (EhNaoParceiros(passageiros))
+                return string.Format(Biblioteca.SEM_SUPERIOR, nomes);
 
             return string.Empty;
+        }
+
+        private bool ExistePolicial(List<Passageiro> passageiros)
+        {
+            return passageiros.Exists(x => x is Policial);
         }
 
         public string ValidarTripulante(List<Passageiro> passageiro)
@@ -111,10 +134,10 @@ namespace CodeITAirLines.Tripulantes
             if (!ExisteMotorista(passageiro))
                 return string.Format(Biblioteca.SEM_MOTORISTA, primeiroPassageiro.Nome);
 
-            return string.Empty; ;
+            return string.Empty;
         }
 
-        private bool ExisteMotorista(List<Passageiro> passageiros)
+        public bool ExisteMotorista(List<Passageiro> passageiros)
         {
             return passageiros.Exists(x => x.Dirigir.Equals(true));
         }

@@ -46,7 +46,7 @@ namespace CodeITAirLines.Veiculo
         {
             var mensagem = string.Empty;
 
-            List<Passageiro> passageiros = new List<Passageiro>();
+            var passageiros = new List<Passageiro>();
 
             caracteres.ForEach(x => passageiros.Add(builderPassageiros.ObterPassageiro(x)));
 
@@ -56,8 +56,9 @@ namespace CodeITAirLines.Veiculo
                 return;
             }
 
-            if (passageiros.Exists(x => x.Dirigir != true))
-                mensagem = passageiros.Count > 1 ? validacoesTripulantes.ValidarTripulantes(passageiros) : validacoesTripulantes.ValidarTripulante(passageiros);
+            var saoDoisPassageiros = passageiros.Count > 1;
+
+            mensagem = saoDoisPassageiros ? validacoesTripulantes.ValidarTripulantes(passageiros) : validacoesTripulantes.ValidarTripulante(passageiros);
 
             if (!string.IsNullOrWhiteSpace(mensagem))
             {

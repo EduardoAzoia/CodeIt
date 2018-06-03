@@ -16,8 +16,6 @@ namespace CodeITAirLines.Veiculo
             Localizacao = BibliotecaLocalizacao.AEROPORTO;
         }
 
-        public abstract List<Type> ObterParceiros();
-
         public abstract List<Type> ObterNaoParceiros();
 
         public abstract List<Type> ObterSuperior();

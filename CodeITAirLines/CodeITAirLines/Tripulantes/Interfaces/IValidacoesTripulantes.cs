@@ -5,9 +5,9 @@ namespace CodeITAirLines.Tripulantes.Interfaces
 {
     public interface IValidacoesTripulantes
     {
-        bool PassageirosProximosAoVeiculo(List<Passageiro> passageiros, string localizacao, out string mensagem);
+        bool ExisteMotorista(List<Passageiro> passageiros);
 
-        bool ValidarHieraquias(Passageiro primeiroPassageiro, Passageiro segundoPassageiro);
+        bool PassageirosProximosAoVeiculo(List<Passageiro> passageiros, string localizacao, out string mensagem);
 
         bool ValidarHierarquias(List<Passageiro> passageiros, out string mensagem);
 

@@ -83,9 +83,9 @@ Opcões:
         public const string MOSTRAR_REGRAS = "R";
         public const string SAIR = "X";
         public const string VIOLACAO = "Violação das regras da empresa";
-        public const string SEM_MOTORISTAS = "Os tripulantes {0} e {1}, não estão capacitados para operarem o SmartForTwo.";
-        public const string SEM_MOTORISTA = "Os tripulante {0} não está capacitado para operar o SmartForTwo.";
-        public const string SEM_SUPERIOR = "Os tripulantes {0} e {1}, não podem ficar a sós.";
+        public const string SEM_MOTORISTAS = "Os tripulantes {0}, não estão capacitados para operarem o SmartForTwo.";
+        public const string SEM_MOTORISTA = "O tripulante {0} não está capacitado para operar o SmartForTwo.";
+        public const string SEM_SUPERIOR = "Os tripulantes {0}, não podem ficar a sós.\n";
         public const string LONGE_DO_CARRO = "Os passageiros devem estar próximo ao veículo!";
         public const string ATENCAO = "Atenção";
         public const string OPERACAO_INVALIDA = "Operação inválida";
@@ -94,6 +94,5 @@ Opcões:
         public const string PARABENS = "Parabéns";
 
         #endregion MENSAGENS_GERAIS
-
     }
 }

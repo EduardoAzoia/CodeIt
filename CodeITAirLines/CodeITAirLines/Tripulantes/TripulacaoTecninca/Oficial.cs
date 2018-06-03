@@ -7,9 +7,7 @@ namespace CodeITAirLines.Tripulantes.TripulacaoTecninca
 {
     public class Oficial : Passageiro
     {
-        public override List<Type> ObterNaoParceiros() => new List<Type> { typeof(ChefeVoo), typeof(Presidiario)};
-
-        public override List<Type> ObterParceiros() => new List<Type> { typeof(Piloto), typeof(Policial)};
+        public override List<Type> ObterNaoParceiros() => new List<Type> { typeof(ChefeVoo), typeof(Presidiario) };
 
         public override List<Type> ObterSuperior() => new List<Type> { typeof(Piloto) };
     }

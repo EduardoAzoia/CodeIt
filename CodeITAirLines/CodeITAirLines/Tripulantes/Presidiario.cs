@@ -3,9 +3,6 @@ using CodeITAirLines.Tripulantes.TripulacaoTecninca;
 using CodeITAirLines.Veiculo;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodeITAirLines.Tripulantes
 {
@@ -13,9 +10,7 @@ namespace CodeITAirLines.Tripulantes
     {
         public override List<Type> ObterNaoParceiros() => ObterListaNaoParceiros();
 
-        public override List<Type> ObterParceiros() => new List<Type> { typeof(Policial) };
-
-        public override List<Type> ObterSuperior() => ObterParceiros();
+        public override List<Type> ObterSuperior() => new List<Type> { typeof(Policial) };
 
         private List<Type> ObterListaNaoParceiros()
         {

@@ -9,8 +9,6 @@ namespace CodeITAirLines.Tripulantes.TribulacaoCabine
     {
         public override List<Type> ObterNaoParceiros() => new List<Type> { typeof(Piloto), typeof(Presidiario) };
 
-        public override List<Type> ObterParceiros() => new List<Type> { typeof(ChefeVoo), typeof(Policial) };
-
         public override List<Type> ObterSuperior() => new List<Type> { typeof(ChefeVoo) };
     }
 }

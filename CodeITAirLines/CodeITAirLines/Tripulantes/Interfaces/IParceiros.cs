@@ -7,8 +7,6 @@ namespace CodeITAirLines.Tripulantes.Interfaces
     {
         List<Type> ObterSuperior();
 
-        List<Type> ObterParceiros();
-
         List<Type> ObterNaoParceiros();
     }
 }
